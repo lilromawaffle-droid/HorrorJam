@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
             
             
         }
-        onGameStateChange?.Invoke(newState);
+        onGameStateChange?.Invoke(newState);//ngasih tau oge nu nyala na naon
     }
 
 }
