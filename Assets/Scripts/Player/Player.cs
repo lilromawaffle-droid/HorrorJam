@@ -3,38 +3,61 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    //import
+    public GameObject cameraUI;
+    public GameObject invisEnemy;
+
     [Header("Stat")]
     [SerializeField] float moveSpeed;     
     [SerializeField] float hitRange;     
     [SerializeField] float hitDamage;
     [SerializeField] LayerMask layerMask;
     
+    //Flag
+    public bool isCameraOn;
 
     //inisialisasi
     public PlayerState playerState;
-    void Awake() //subcribe
-    {
-        GameManager.onGameStateChange += onGameStateChange;
-    }
-    void OnDestroy() //unsubcribe
-    {
-        GameManager.onGameStateChange -= onGameStateChange;        
-    }
 
-    //kalau dipanggil event nya langsung nyala
-    void onGameStateChange(GameState gameState)
+    void Awake()
     {
-
+        isCameraOn =false;
+        playerState= PlayerState.NORMAL;
+        cameraUI.SetActive(false);
+        invisEnemy.SetActive(false);
     }
-
     void Update()
     {
 
-
-        Walk();
-        if (Input.GetMouseButtonDown(0))
+        //input
+        Walk(); 
+        if (Mouse.current.rightButton.wasPressedThisFrame && !isCameraOn)
         {
-            Capture();
+            playerState = PlayerState.CAMERA;
+            Debug.Log("kamera");
+        }else if (Mouse.current.rightButton.wasReleasedThisFrame && isCameraOn)
+        {
+            Debug.Log("normal");
+            playerState = PlayerState.NORMAL;
+        }
+
+
+        switch (playerState)
+        {
+            case(PlayerState.NORMAL):
+                isCameraOn=false;
+                cameraUI.SetActive(false);
+                invisEnemy.SetActive(false);//ganti jadi courutine
+                break;
+            case(PlayerState.CAMERA):
+                cameraUI.SetActive(true);//ganti jadi courutine
+                invisEnemy.SetActive(true);//ganti jadi courutine
+                isCameraOn=true; 
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Capture();
+                }
+                break;
         }
     }
     void Walk()
