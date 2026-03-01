@@ -7,7 +7,7 @@ public class GlitchObj : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            
+                
         }
     }
 }
