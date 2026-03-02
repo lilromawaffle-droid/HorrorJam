@@ -14,6 +14,7 @@ public class EnemyEventHandler : MonoBehaviour
     {
         PlayerStateMachine.instance.onCameraDeactivate -= OnCameraDeactivate;        
         PlayerStateMachine.instance.onCameraActivate -= OnCameraActivate;
+        GameManager.instance.enemyDeathCounter ++;
     }
 
     void OnCameraActivate()

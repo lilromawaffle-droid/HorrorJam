@@ -3,48 +3,85 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("")]
-    public static GameManager Instance;
+    public static GameManager instance;
 
+    //event
+    public event Action<int> onCompleteStage;
 
+    //inisialisasi
+    [Header("KillCount")]
+    [SerializeField] public int enemyDeathCounter;
+    [SerializeField] public int maxEnemyDeathCounter;
+
+    //state
     public GameState gameState;
-    public static event Action <GameState> onGameStateChange; 
+    public StagesState currentStage;
+    public StagesState previousStage;
+
+    
+    //flag
 
     void Awake()
     {
-        Instance = this;
+        instance = this;
         gameState = GameState.MAIN_MENU;
+        currentStage = StagesState.Tutorial;
     }
 
-    public void UpdateGameState(GameState newState)
+    void Update()
     {
-        gameState = newState;
+        
+        //mastiin cuma di run sekali
+        if (currentStage != previousStage)
+        {
+            previousStage = currentStage;
+            OnChangeState(currentStage);
+        }
+
+        if (enemyDeathCounter >= maxEnemyDeathCounter)
+        {
+            currentStage = StagesState.Stage1;
+        }
+    }
+
+
+    void OnChangeState(StagesState newState)
+    {
         switch (newState)
         {
-            case(GameState.MAIN_MENU):
+            case StagesState.Loby:
                 break;
-            case(GameState.MENU):
+            case StagesState.Tutorial:
+                enemyDeathCounter = 0;
+                maxEnemyDeathCounter =1; 
+                onCompleteStage?.Invoke(0);
                 break;
-            case(GameState.WIN):
+            case StagesState.Stage1:
+                enemyDeathCounter = 0;
+                maxEnemyDeathCounter =2;
+                onCompleteStage?.Invoke(1);
                 break;
-            case(GameState.LOSE):
-                break;
-            case(GameState.OPEN_CAMERA):
-                break;
-            case(GameState.CAMERA):
-                break;
-            case(GameState.OPEN_NORMAL):
-                break;
-            case(GameState.NORMAL):
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(newState),newState,null);
-            
             
         }
-        onGameStateChange?.Invoke(newState);//ngasih tau oge nu nyala na naon
     }
 
+    void OnUpdateState()
+    {
+        
+    }
+
+
+
+}
+    public enum StagesState
+{
+    Loby,
+    Tutorial,
+    Stage1,
+    Stage2,
+    Stage3,
+    Stage4,
+    Stage5
 }
 
     public enum GameState
