@@ -3,10 +3,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
+#region inisialisasi
+
+
     public static GameManager instance;
 
     //event
     public event Action<int> onCompleteStage;
+    public event Action<int> onCompleteGame;
 
     //inisialisasi
     [Header("KillCount")]
@@ -17,9 +22,9 @@ public class GameManager : MonoBehaviour
     public GameState gameState;
     public StagesState currentStage;
     public StagesState previousStage;
-
+#endregion
     
-    //flag
+#region eksekusi
 
     void Awake()
     {
@@ -30,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+
         
         //mastiin cuma di run sekali
         if (currentStage != previousStage)
@@ -40,11 +46,12 @@ public class GameManager : MonoBehaviour
 
         if (enemyDeathCounter >= maxEnemyDeathCounter)
         {
-            currentStage = StagesState.Stage1;
+            NextStages();
         }
     }
+#endregion
 
-
+#region Changing State
     void OnChangeState(StagesState newState)
     {
         switch (newState)
@@ -61,7 +68,33 @@ public class GameManager : MonoBehaviour
                 maxEnemyDeathCounter =2;
                 onCompleteStage?.Invoke(1);
                 break;
-            
+            case StagesState.Stage2:
+                enemyDeathCounter = 0;
+                maxEnemyDeathCounter = 3;
+                onCompleteStage?.Invoke(2);
+                break;
+
+            case StagesState.Stage3:
+                enemyDeathCounter = 0;
+                maxEnemyDeathCounter = 4;
+                onCompleteStage?.Invoke(3);
+                break;
+
+            case StagesState.Stage4:
+                enemyDeathCounter = 0;
+                maxEnemyDeathCounter = 5;
+                onCompleteStage?.Invoke(4);
+                break;
+
+            case StagesState.Stage5:
+                enemyDeathCounter = 0;
+                maxEnemyDeathCounter = 15; 
+                onCompleteStage?.Invoke(5);
+                Debug.Log("End");
+                break;
+            default:
+                onCompleteGame?.Invoke(0);
+                break;
         }
     }
 
@@ -70,9 +103,30 @@ public class GameManager : MonoBehaviour
         
     }
 
+    void NextStages()
+    {
+        StagesState[] stagesInt = (StagesState[])System.Enum.GetValues(typeof(StagesState));
+        int currentIndex = System.Array.IndexOf(stagesInt, currentStage);
 
+        if (currentIndex < stagesInt.Length - 1)
+        {
+            currentStage = stagesInt[currentIndex + 1]; 
+            Debug.Log("Stage berubah ke: " + currentStage);
+        }
+    }
+#endregion
 
+#region function
+    void AddKillCount()
+    {
+        
+    }
+#endregion
 }
+
+
+
+#region  State
     public enum StagesState
 {
     Loby,
@@ -84,14 +138,12 @@ public class GameManager : MonoBehaviour
     Stage5
 }
 
-    public enum GameState
-    {
-        MAIN_MENU,
-        MENU,
-        WIN,
-        LOSE,
-        OPEN_CAMERA,
-        CAMERA,
-        OPEN_NORMAL,
-        NORMAL
-    }
+public enum GameState
+{
+    MAIN_MENU,
+    MENU,
+    WIN,
+    LOSE,
+    NORMAL
+}
+#endregion

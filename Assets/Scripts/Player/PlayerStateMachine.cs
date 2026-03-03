@@ -21,6 +21,7 @@ public class PlayerStateMachine : MonoBehaviour
     //event
     public event Action onCameraActivate;
     public event Action onCameraDeactivate;
+    public event Action onPlayerDie;
 
     void Awake()
     {
@@ -106,9 +107,9 @@ public class PlayerStateMachine : MonoBehaviour
     void Capture()
     {
         Debug.Log("capture");
-        if (Physics.Raycast(transform.position,transform.TransformDirection(Vector3.forward),out RaycastHit hitInfo, playerStat.hitRange, playerStat.layerMask))
+        if (Physics.Raycast(playerStat.camera.transform.position,playerStat.camera.transform.TransformDirection(Vector3.forward),out RaycastHit hitInfo, playerStat.hitRange, playerStat.layerMask))
         {
-            Debug.DrawRay(transform.position,transform.TransformDirection(Vector3.forward)*hitInfo.distance,Color.blue,playerStat.layerMask);
+            Debug.DrawRay(playerStat.camera.transform.position,playerStat.camera.transform.TransformDirection(Vector3.forward)*hitInfo.distance,Color.blue,playerStat.layerMask);
             Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
             if (enemy != null)
             {
