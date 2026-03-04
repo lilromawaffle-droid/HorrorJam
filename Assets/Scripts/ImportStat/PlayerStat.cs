@@ -7,4 +7,6 @@ public class PlayerStat : BaseStat
     public LayerMask layerMask;
     public float hitRange;
     public GameObject camera; 
+    public int currentBattery;
+    public int maxBattery;
 }

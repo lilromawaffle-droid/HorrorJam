@@ -8,6 +8,7 @@ public class EnemyStat:BaseStat
 {
     public String Name;
     public String Description;
+    public float Hp;
     public GameObject symbolObject;
     public GameObject manifestObject;
 }

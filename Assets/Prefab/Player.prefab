@@ -156,7 +156,8 @@ GameObject:
   - component: {fileID: 6512846954615972276}
   - component: {fileID: 2234215352240487342}
   - component: {fileID: 5661254004697500642}
-  - component: {fileID: 6803282053557130579}
+  - component: {fileID: 2742977020414775399}
+  - component: {fileID: 6288324618497923167}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -195,16 +196,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerStat:
-    moveSpeed: 100
-    maxMoveSpeed: 100
-    moveSpeedDivider: 1.51
+    moveSpeed: 50
+    maxMoveSpeed: 50
+    moveSpeedDivider: 2
     hitDamage: 10
     layerMask:
       serializedVersion: 2
       m_Bits: 8
     hitRange: 50
+    camera: {fileID: 0}
+    currentBattery: 5
+    maxBattery: 5
   isCameraOn: 0
   playerState: 0
+  currentBattery: 0
 --- !u!114 &5661254004697500642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,33 +222,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca1c82f7fd12b9449be25cd2cae58795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InpurManager
---- !u!54 &6803282053557130579
-Rigidbody:
+--- !u!143 &2742977020414775399
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4613135619387030507}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 1
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6288324618497923167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4613135619387030507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea009979815b61d45948902908b7daff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DontDestroyOnlLoad
 --- !u!1 &6536331453913754971
 GameObject:
   m_ObjectHideFlags: 0

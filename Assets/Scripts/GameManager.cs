@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         gameState = GameState.MAIN_MENU;
-        currentStage = StagesState.Tutorial;
+        currentStage = StagesState.Loby;
     }
 
     void Update()
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
                 break;
             case StagesState.Tutorial:
                 enemyDeathCounter = 0;
-                maxEnemyDeathCounter =1; 
+                maxEnemyDeathCounter =5; 
                 onCompleteStage?.Invoke(0);
                 break;
             case StagesState.Stage1:

@@ -17,20 +17,27 @@ public class PlayerStateMachine : MonoBehaviour
     public static PlayerStateMachine instance;
     public PlayerState playerState;
     private PlayerState previousState;
+    public int currentBattery;
 
     //event
     public event Action onCameraActivate;
     public event Action onCameraDeactivate;
     public event Action onPlayerDie;
+    public event Action <int> onBatteryInteractPlus;
+    public event Action <int> onBatteryInteractMin;
+
 
     void Awake()
     {
+        currentBattery = playerStat.currentBattery;
         instance = this;
         isCameraOn =false;
         playerState= PlayerState.NORMAL;
     }
     void Update()
     {
+        DontDestroyOnLoad(this.gameObject);
+        DeathChecker();
         Walk();
         HandleInput();
 
@@ -48,13 +55,21 @@ public class PlayerStateMachine : MonoBehaviour
     void HandleInput()
     {
         if (InpurManager.instance.onClickRightMouse() && !isCameraOn)
-            {
-                playerState = PlayerState.CAMERA;
-            }
+        {
+            playerState = PlayerState.CAMERA;
+        }
         else if (InpurManager.instance.onRealeasedRightMouse() && isCameraOn)
+        {
+            playerState = PlayerState.NORMAL;
+        }
+        if (InpurManager.instance.onClickLeftMouse() && isCameraOn)
+        {
+            if (currentBattery > 0)
             {
-                playerState = PlayerState.NORMAL;
+                Capture();
             }
+        }
+
     }
 #endregion 
 
@@ -67,11 +82,13 @@ public class PlayerStateMachine : MonoBehaviour
         switch (newState)
         {
             case PlayerState.NORMAL:
+                isCameraOn = false;
                 onCameraDeactivate?.Invoke(); 
                 playerStat.moveSpeed = playerStat.maxMoveSpeed;
                 break;
             case PlayerState.CAMERA:
                 onCameraActivate?.Invoke();
+                isCameraOn = true;
                 playerStat.moveSpeed -= playerStat.maxMoveSpeed/playerStat.moveSpeedDivider;
                 break;
         }
@@ -83,13 +100,8 @@ public class PlayerStateMachine : MonoBehaviour
         switch (playerState)
         {
             case PlayerState.NORMAL:
-                isCameraOn = false;
                 break;
-            case PlayerState.CAMERA:
-                isCameraOn = true;
-                
-                if (InpurManager.instance.onClickLeftMouse())
-                    Capture();
+            case PlayerState.CAMERA:                
                 break;
         }
     }
@@ -104,18 +116,40 @@ public class PlayerStateMachine : MonoBehaviour
         transform.Translate(movement *  playerStat.moveSpeed* Time.deltaTime);
     }
 
+    void DeathChecker()
+    {
+        if (playerStat.currentBattery<=0)
+        {
+            onPlayerDie?.Invoke();
+        }
+    }
+
     void Capture()
     {
         Debug.Log("capture");
         if (Physics.Raycast(playerStat.camera.transform.position,playerStat.camera.transform.TransformDirection(Vector3.forward),out RaycastHit hitInfo, playerStat.hitRange, playerStat.layerMask))
         {
             Debug.DrawRay(playerStat.camera.transform.position,playerStat.camera.transform.TransformDirection(Vector3.forward)*hitInfo.distance,Color.blue,playerStat.layerMask);
-            Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
+            EnemyEventHandler enemy = hitInfo.transform.GetComponent<EnemyEventHandler>();
             if (enemy != null)
             {
                 enemy.Damage(playerStat.hitDamage);
             }
         }
+        MinBattery(1);
+    }
+
+    void MinBattery(int cost)
+    {
+        currentBattery -= cost;
+        onBatteryInteractMin?.Invoke(cost);
+    }
+
+    void PlusBattery(int cost)
+    {
+        currentBattery += cost;
+        onBatteryInteractPlus?.Invoke(cost);
+        
     }
 #endregion
 }

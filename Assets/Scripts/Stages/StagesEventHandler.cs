@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StagesEventHandler : MonoBehaviour
 {
@@ -8,10 +9,10 @@ public class StagesEventHandler : MonoBehaviour
     void Start()
     {
         GameManager.instance.onCompleteStage += spawnStage;
-        //simple hela
-        stageGameObject[0].SetActive(false);
-        stageGameObject[1].SetActive(false);
-        stageGameObject[2].SetActive(false);
+        // simple hela
+        // stageGameObject[0].SetActive(false);
+        // stageGameObject[1].SetActive(false);
+        // stageGameObject[2].SetActive(false);
     }
     void OnDestroy()
     {
@@ -20,7 +21,8 @@ public class StagesEventHandler : MonoBehaviour
 
     void spawnStage(int importValue)
     {
-        stageGameObject[importValue].SetActive(true);
-        Destroy(stageGameObject[importValue-1]);    
+        SceneManager.LoadScene(importValue);
+        // stageGameObject[importValue].SetActive(true);
+        // Destroy(stageGameObject[importValue-1]);    
     }
 }

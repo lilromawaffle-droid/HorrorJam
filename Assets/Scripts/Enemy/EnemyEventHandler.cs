@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EnemyEventHandler : MonoBehaviour
 {
+    [SerializeField]EnemyStat enemyStat;
     void Start()
     {    
         PlayerStateMachine.instance.onCameraActivate += OnCameraActivate;        
-        PlayerStateMachine.instance.onCameraDeactivate += OnCameraDeactivate;        
-        gameObject.SetActive(false);
+        PlayerStateMachine.instance.onCameraDeactivate += OnCameraDeactivate;
     }
     private void OnDestroy()
     {
@@ -19,12 +19,26 @@ public class EnemyEventHandler : MonoBehaviour
 
     void OnCameraActivate()
     {
-        gameObject.SetActive(true);
+        enemyStat.manifestObject.SetActive(true);
+        enemyStat.symbolObject.SetActive(false);
+        Debug.Log("Manifest On");
+        //gameObject.SetActive(true);
     }
 
     void OnCameraDeactivate()
     {
-        gameObject.SetActive(false);        
+        enemyStat.manifestObject.SetActive(false);
+        enemyStat.symbolObject.SetActive(true);
+        Debug.Log("Symbol On");
+        //gameObject.SetActive(false);        
+    }
+    public void Damage(float damage)
+    {
+        enemyStat.Hp -= damage;
+        if (enemyStat.Hp <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
 }
