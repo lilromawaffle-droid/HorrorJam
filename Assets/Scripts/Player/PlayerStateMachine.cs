@@ -17,7 +17,6 @@ public class PlayerStateMachine : MonoBehaviour
     public static PlayerStateMachine instance;
     public PlayerState playerState;
     private PlayerState previousState;
-    public int currentBattery;
 
     //event
     public event Action onCameraActivate;
@@ -29,14 +28,12 @@ public class PlayerStateMachine : MonoBehaviour
 
     void Awake()
     {
-        currentBattery = playerStat.currentBattery;
         instance = this;
         isCameraOn =false;
         playerState= PlayerState.NORMAL;
     }
     void Update()
     {
-        DontDestroyOnLoad(this.gameObject);
         DeathChecker();
         Walk();
         HandleInput();
@@ -64,7 +61,7 @@ public class PlayerStateMachine : MonoBehaviour
         }
         if (InpurManager.instance.onClickLeftMouse() && isCameraOn)
         {
-            if (currentBattery > 0)
+            if (playerStat.currentBattery > 0)
             {
                 Capture();
             }
@@ -141,13 +138,13 @@ public class PlayerStateMachine : MonoBehaviour
 
     void MinBattery(int cost)
     {
-        currentBattery -= cost;
+        playerStat.currentBattery -= cost;
         onBatteryInteractMin?.Invoke(cost);
     }
 
     void PlusBattery(int cost)
     {
-        currentBattery += cost;
+        playerStat.currentBattery += cost;
         onBatteryInteractPlus?.Invoke(cost);
         
     }

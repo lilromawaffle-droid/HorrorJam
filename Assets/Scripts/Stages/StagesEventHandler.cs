@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class StagesEventHandler : MonoBehaviour
 {
-    public List<GameObject> stageGameObject = new List<GameObject>();
 
     void Start()
     {
