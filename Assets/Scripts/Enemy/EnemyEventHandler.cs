@@ -24,16 +24,31 @@ public class EnemyEventHandler : MonoBehaviour
 
     void OnCameraActivate()
     {
-        enemyStat.manifestObject.SetActive(true);
-        enemyStat.symbolObject.SetActive(false);
+        if (enemyStat.manifestObject != null)
+        {
+            enemyStat.manifestObject.SetActive(true);
+            
+        }
+        if (enemyStat.symbolObject != null)
+        {
+            enemyStat.symbolObject.SetActive(false);
+        }
+
         Debug.Log("Manifest On");
         //gameObject.SetActive(true);
     }
 
     void OnCameraDeactivate()
     {
-        enemyStat.manifestObject.SetActive(false);
-        enemyStat.symbolObject.SetActive(true);
+        if (enemyStat.manifestObject != null)
+        {
+            enemyStat.manifestObject.SetActive(false);
+        }
+
+        if (enemyStat.symbolObject != null)
+        {
+            enemyStat.symbolObject.SetActive(true);
+        }
         Debug.Log("Symbol On");
         //gameObject.SetActive(false);        
     }

@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4531863344395918128}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.7, y: 0, z: 16.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 15, y: 15, z: 15}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9452ae1262a74094f8a68013fbcd1834, type: 2}
+  - {fileID: 2100000, guid: 4425ca15e9471194d8f5bd2e56f2013b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 6207292316429657219}
   - component: {fileID: 3857532834224592840}
   - component: {fileID: 5066634695478972444}
+  - component: {fileID: 5312322419178246292}
   m_Layer: 0
   m_Name: glitch npc
   m_TagString: Untagged
@@ -138,9 +139,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9148320034980042981}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 15.917649, y: -5.39945, z: 28.5852}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.54038, y: 0.54038, z: 0.54038}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3002257140423949487}
@@ -174,8 +175,30 @@ SphereCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 19.74
+  m_Radius: 10.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5312322419178246292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9148320034980042981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f165284191b370347a3dc70789673ae1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyEventHandler
+  enemyStat:
+    moveSpeed: 0
+    maxMoveSpeed: 0
+    moveSpeedDivider: 0
+    hitDamage: 0
+    Name: 
+    Description: 
+    Hp: 0
+    symbolObject: {fileID: 0}
+    manifestObject: {fileID: 0}
