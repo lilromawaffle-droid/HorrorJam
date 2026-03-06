@@ -17,6 +17,7 @@ public class PlayerStateMachine : MonoBehaviour
     public static PlayerStateMachine instance;
     public PlayerState playerState;
     private PlayerState previousState;
+    private CharacterController characterController;
 
     //event
     public event Action onCameraActivate;
@@ -31,9 +32,19 @@ public class PlayerStateMachine : MonoBehaviour
         instance = this;
         isCameraOn =false;
         playerState= PlayerState.NORMAL;
+          characterController = GetComponent<CharacterController>();
     }
     void Update()
     {
+        // Debug.DrawRay(
+        // playerStat.camera.transform.position,
+        // playerStat.camera.transform.TransformDirection(Vector3.forward) * playerStat.hitRange,
+        // Color.red);
+        Debug.DrawRay(
+        playerStat.camera.transform.position,
+        playerStat.camera.transform.forward * playerStat.hitRange,
+        Color.yellow);
+
         DeathChecker();
         Walk();
         HandleInput();
@@ -61,10 +72,7 @@ public class PlayerStateMachine : MonoBehaviour
         }
         if (InpurManager.instance.onClickLeftMouse() && isCameraOn)
         {
-            if (playerStat.currentBattery > 0)
-            {
-                Capture();
-            }
+            Capture();        
         }
 
     }
@@ -105,7 +113,27 @@ public class PlayerStateMachine : MonoBehaviour
 #endregion
 
 #region function
+
     void Walk()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        // Ambil arah kamera, tapi flatten (ignore sumbu Y)
+        Vector3 camForward = playerStat.camera.transform.forward;
+        Vector3 camRight = playerStat.camera.transform.right;
+        camForward.y = 0f;
+        camRight.y = 0f;
+        camForward.Normalize();
+        camRight.Normalize();
+
+        // Gerak mengikuti arah kamera
+        Vector3 movement = (camForward * verticalInput + camRight * horizontalInput);
+
+        characterController.Move(movement * playerStat.moveSpeed * Time.deltaTime);
+    }
+    
+    void Walked()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical"); 
@@ -122,19 +150,37 @@ public class PlayerStateMachine : MonoBehaviour
     }
 
     void Capture()
-    {
+    {                    
+        RaycastHit hitInfo;
+        
         Debug.Log("capture");
-        if (Physics.Raycast(playerStat.camera.transform.position,playerStat.camera.transform.TransformDirection(Vector3.forward),out RaycastHit hitInfo, playerStat.hitRange, playerStat.layerMask))
+        if (Physics.Raycast(playerStat.camera.transform.position,playerStat.camera.transform.TransformDirection(Vector3.forward),out  hitInfo, playerStat.hitRange,playerStat.layerMask))
         {
+            Debug.Log("hit something");
             Debug.DrawRay(playerStat.camera.transform.position,playerStat.camera.transform.TransformDirection(Vector3.forward)*hitInfo.distance,Color.blue,playerStat.layerMask);
             EnemyEventHandler enemy = hitInfo.transform.GetComponent<EnemyEventHandler>();
             if (enemy != null)
             {
-                enemy.Damage(playerStat.hitDamage);
+                enemy.TakeDamage(playerStat.hitDamage);
+                Debug.DrawRay(
+                playerStat.camera.transform.position,
+                playerStat.camera.transform.forward * hitInfo.distance,
+                Color.green,
+                0.5f);
             }
         }
+        else
+        {
+            Debug.Log("hit nithun");
+            Debug.DrawRay(
+            playerStat.camera.transform.position,
+            playerStat.camera.transform.forward * playerStat.hitRange,
+            Color.red,
+            0.5f);
+        }
         MinBattery(1);
-    }
+    } 
+
 
     void MinBattery(int cost)
     {

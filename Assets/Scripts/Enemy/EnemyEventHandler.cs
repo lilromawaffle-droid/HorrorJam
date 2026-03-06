@@ -10,6 +10,11 @@ public class EnemyEventHandler : MonoBehaviour
         PlayerStateMachine.instance.onCameraActivate += OnCameraActivate;        
         PlayerStateMachine.instance.onCameraDeactivate += OnCameraDeactivate;
     }
+
+    void Update()
+    {
+        
+    }
     private void OnDestroy()
     {
         PlayerStateMachine.instance.onCameraDeactivate -= OnCameraDeactivate;        
@@ -32,9 +37,10 @@ public class EnemyEventHandler : MonoBehaviour
         Debug.Log("Symbol On");
         //gameObject.SetActive(false);        
     }
-    public void Damage(float damage)
+    public void TakeDamage(float damage)
     {
         enemyStat.Hp -= damage;
+        Debug.Log("nerima "+damage+" damage");
         if (enemyStat.Hp <= 0)
         {
             Destroy(this.gameObject);
