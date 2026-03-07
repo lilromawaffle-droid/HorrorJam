@@ -72,7 +72,10 @@ public class PlayerStateMachine : MonoBehaviour
         }
         if (InpurManager.instance.onClickLeftMouse() && isCameraOn)
         {
-            Capture();        
+            if (playerStat.currentBattery > 0)
+            {
+                Capture();        
+            }
         }
 
     }
