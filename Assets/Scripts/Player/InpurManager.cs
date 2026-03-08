@@ -23,4 +23,8 @@ public class InpurManager : MonoBehaviour
     {
         return Mouse.current.leftButton.wasPressedThisFrame;
     }
+    public bool onClickEkey()
+    {
+        return Keyboard.current.qKey.wasPressedThisFrame;
+    }
 }

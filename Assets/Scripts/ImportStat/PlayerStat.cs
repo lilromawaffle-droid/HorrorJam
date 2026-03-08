@@ -9,4 +9,6 @@ public class PlayerStat : BaseStat
     public GameObject camera; 
     public int currentBattery;
     public int maxBattery;
+    public float currentSanity;
+    public float maxSanity;
 }

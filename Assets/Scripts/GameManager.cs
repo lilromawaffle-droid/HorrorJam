@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -12,11 +13,13 @@ public class GameManager : MonoBehaviour
     //event
     public event Action<int> onCompleteStage;
     public event Action<int> onCompleteGame;
+    public event Action<int> onCompleteStageMaxKillCount;
 
     //inisialisasi
     [Header("KillCount")]
     [SerializeField] public int enemyDeathCounter;
     [SerializeField] public int maxEnemyDeathCounter;
+    [SerializeField] private TextMeshProUGUI killCountText;
 
     //state
     public GameState gameState;
@@ -35,8 +38,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
-        
+        killCountText.text=enemyDeathCounter+"/"+maxEnemyDeathCounter;
         //mastiin cuma di run sekali
         if (currentStage != previousStage)
         {
@@ -60,36 +62,48 @@ public class GameManager : MonoBehaviour
                 break;
             case StagesState.Tutorial:
                 enemyDeathCounter = 0;
-                maxEnemyDeathCounter =5; 
+                maxEnemyDeathCounter =82;
+                PlayerStateMachine.instance.PlusBattery(5);
                 onCompleteStage?.Invoke(0);
+                onCompleteStageMaxKillCount?.Invoke(82);
                 break;
             case StagesState.Stage1:
                 enemyDeathCounter = 0;
-                maxEnemyDeathCounter =2;
+                maxEnemyDeathCounter =5;
+                PlayerStateMachine.instance.PlusBattery(5);
                 onCompleteStage?.Invoke(1);
+                onCompleteStageMaxKillCount?.Invoke(5);
                 break;
             case StagesState.Stage2:
                 enemyDeathCounter = 0;
-                maxEnemyDeathCounter = 3;
+                maxEnemyDeathCounter = 8;
+                PlayerStateMachine.instance.PlusBattery(5);
                 onCompleteStage?.Invoke(2);
+                onCompleteStageMaxKillCount?.Invoke(8);
                 break;
 
             case StagesState.Stage3:
                 enemyDeathCounter = 0;
-                maxEnemyDeathCounter = 4;
+                maxEnemyDeathCounter = 10;
+                PlayerStateMachine.instance.PlusBattery(5);
                 onCompleteStage?.Invoke(3);
+                onCompleteStageMaxKillCount?.Invoke(10);
                 break;
 
             case StagesState.Stage4:
                 enemyDeathCounter = 0;
-                maxEnemyDeathCounter = 5;
+                maxEnemyDeathCounter = 12;
+                PlayerStateMachine.instance.PlusBattery(5);
                 onCompleteStage?.Invoke(4);
+                onCompleteStageMaxKillCount?.Invoke(12);
                 break;
 
             case StagesState.Stage5:
                 enemyDeathCounter = 0;
-                maxEnemyDeathCounter = 15; 
+                maxEnemyDeathCounter = 100; 
+                PlayerStateMachine.instance.PlusBattery(5);
                 onCompleteStage?.Invoke(5);
+                onCompleteStageMaxKillCount?.Invoke(100);
                 Debug.Log("End");
                 break;
             default:
@@ -98,10 +112,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnUpdateState()
-    {
-        
-    }
 
     void NextStages()
     {
@@ -116,12 +126,8 @@ public class GameManager : MonoBehaviour
     }
 #endregion
 
-#region function
-    void AddKillCount()
-    {
-        
-    }
-#endregion
+
+
 }
 
 

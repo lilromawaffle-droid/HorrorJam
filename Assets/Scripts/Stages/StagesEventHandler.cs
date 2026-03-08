@@ -4,14 +4,16 @@ using UnityEngine.SceneManagement;
 
 public class StagesEventHandler : MonoBehaviour
 {
+    List<GameObject> stageGameObject = new List<GameObject>();
 
     void Start()
     {
         GameManager.instance.onCompleteStage += spawnStage;
-        // simple hela
-        // stageGameObject[0].SetActive(false);
-        // stageGameObject[1].SetActive(false);
-        // stageGameObject[2].SetActive(false);
+         stageGameObject[1].SetActive(false);
+         stageGameObject[2].SetActive(false);
+         stageGameObject[3].SetActive(false);
+         stageGameObject[4].SetActive(false);
+         stageGameObject[5].SetActive(false);
     }
     void OnDestroy()
     {
@@ -20,8 +22,7 @@ public class StagesEventHandler : MonoBehaviour
 
     void spawnStage(int importValue)
     {
-        SceneManager.LoadScene(importValue);
-        // stageGameObject[importValue].SetActive(true);
-        // Destroy(stageGameObject[importValue-1]);    
+        stageGameObject[importValue].SetActive(true);
+        Destroy(stageGameObject[importValue-1]);
     }
 }

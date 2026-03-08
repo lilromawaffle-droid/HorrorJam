@@ -9,9 +9,12 @@ public class PlayerStateMachine : MonoBehaviour
     //import
     
     [SerializeField] PlayerStat playerStat;
+    [SerializeField] private AudioSource cameraActivate;
+
 
     //Flag
     public bool isCameraOn;
+    public bool isFlashOn;
 
     //inisialisasi
     public static PlayerStateMachine instance;
@@ -22,7 +25,10 @@ public class PlayerStateMachine : MonoBehaviour
     //event
     public event Action onCameraActivate;
     public event Action onCameraDeactivate;
-    public event Action onPlayerDie;
+    public event Action onCameraCapture;
+    public event Action onPlayerDieByBattery;
+    public event Action onPlayerDieByLust;
+    public event Action onPlayerDieByWrath;
     public event Action <int> onBatteryInteractPlus;
     public event Action <int> onBatteryInteractMin;
 
@@ -32,20 +38,26 @@ public class PlayerStateMachine : MonoBehaviour
         instance = this;
         isCameraOn =false;
         playerState= PlayerState.NORMAL;
-          characterController = GetComponent<CharacterController>();
+        characterController = GetComponent<CharacterController>();
+    }
+
+    void Start()
+    {
+        HealrthbarUi.instance.MaxSanity(playerStat.maxSanity);
     }
     void Update()
     {
-        // Debug.DrawRay(
-        // playerStat.camera.transform.position,
-        // playerStat.camera.transform.TransformDirection(Vector3.forward) * playerStat.hitRange,
-        // Color.red);
+        HealrthbarUi.instance.CurrentSanity(playerStat.currentSanity);
         Debug.DrawRay(
         playerStat.camera.transform.position,
         playerStat.camera.transform.forward * playerStat.hitRange,
         Color.yellow);
 
         DeathChecker();
+        if (playerStat.currentBattery >= playerStat.maxBattery)
+        {
+            playerStat.currentBattery = playerStat.maxBattery;
+        }
         Walk();
         HandleInput();
 
@@ -92,7 +104,7 @@ public class PlayerStateMachine : MonoBehaviour
             case PlayerState.NORMAL:
                 isCameraOn = false;
                 onCameraDeactivate?.Invoke(); 
-                playerStat.moveSpeed = playerStat.maxMoveSpeed;
+                playerStat.moveSpeed += playerStat.maxMoveSpeed/playerStat.moveSpeedDivider;
                 break;
             case PlayerState.CAMERA:
                 onCameraActivate?.Invoke();
@@ -148,7 +160,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         if (playerStat.currentBattery<=0)
         {
-            onPlayerDie?.Invoke();
+            onPlayerDieByBattery?.Invoke();
         }
     }
 
@@ -182,6 +194,7 @@ public class PlayerStateMachine : MonoBehaviour
             0.5f);
         }
         MinBattery(1);
+        onCameraCapture?.Invoke();
     } 
 
 
@@ -191,11 +204,30 @@ public class PlayerStateMachine : MonoBehaviour
         onBatteryInteractMin?.Invoke(cost);
     }
 
-    void PlusBattery(int cost)
+    public void PlusBattery(int cost)
     {
         playerStat.currentBattery += cost;
         onBatteryInteractPlus?.Invoke(cost);
-        
+    }
+
+    public void TakeDamage(float damageAmount)
+    {
+        playerStat.currentSanity -= damageAmount;
+    }
+
+    public void Heal(float healAmount)
+    {
+        playerStat.currentSanity += healAmount;   
+    }
+
+    public void EnterSlow(float slowMultiplier = 0.5f)
+    {
+        playerStat.moveSpeed = playerStat.maxMoveSpeed * slowMultiplier;
+    }
+
+    public void ExitSlow()
+    {
+        playerStat.moveSpeed = playerStat.maxMoveSpeed;
     }
 #endregion
 }
